@@ -22,7 +22,6 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     addSubtask,
     deleteTodo,
     deleteSubtask,
-    editTodo,
     editSubtask,
     completeSubtask,
     completeTodo,
@@ -74,9 +73,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     deleteTodo(subtaskId);
   };
 
-  const handleEditTask = (taskId: number, taskText: string) => {
-    setShowEditSubtaskModal(true);
-  };
+  // const handleEditTask = (taskId: number, taskText: string) => {
+  //   setShowEditSubtaskModal(true);
+  // };
 
   const handleEditSubtask = (subtaskId: number, subtaskText: string) => {
     setShowEditSubtaskModal(true);

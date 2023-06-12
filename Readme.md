@@ -1,98 +1,41 @@
-# Marquee Equity Assignment
+# Marquee Frontend Assigment
 
-## Installation
-
-```shell
-$ https://github.com/HarshKumarraghav/MarqueeEquity-Assessment.git
-$ cd MarqueeEquity-Assessment
-$ npm install
-$ npm run dev
-```
-
-This project implements a simplified version of JWT (JSON Web Token) authentication for an application. The authentication process involves storing user credentials in the local storage and comparing them during login to grant access to the next page. The project also includes robust input validation and a responsive Todo page with subtask functionality.
-
-![Project Image](./public/assets/MELogo.svg)
+This is a simple Todo application built with ReactJS, TypeScript, React Router DOM, Formik for validation, and Tailwind CSS for styling.
 
 ## Features
 
-### User Object Creation and Storage
+- User authentication using JWT token-based authentication.
+- Secure storage of user login information using React Context API.
+- Logout functionality.
+- Dashboard with the ability to add new Todos.
+- Nested Todo (Sub Task) feature for organizing tasks.
+- Sanitization and validation of user inputs to prevent injection attacks.
+- Route guard for authentication, redirecting unauthorized users to the login page.
 
-When the application is opened, a user object is created with the following details:
+## Setup
 
-```json
-{
-  "name": "John Doe",
-  "email": "johndoe@gmail.com",
-  "password": "Qwerty@123"
-}
+Follow the instructions below to set up and run the application locally:
+
+1. Clone the repository:
+  ```bash
+      git clone https://github.com/mdsahilhussain/marquee_frontend_assigment.git
+  ```
+2. Install dependencies:
+  ```bash
+     cd react-todo-app
+     npm install
+  ```
+3. Start the development server:
+  ```bash
+     npm start
+  ```
+
+#### Authorized User
+- user email
+```bash
+  useronetest1@gmail.com
 ```
-
-This user object is then stored in the local storage for later use.
-
-## Login Process
-
-The login process involves comparing the entered user credentials (email and password) with the stored user object. If the entered credentials match the stored user's credentials, the application proceeds to the next page. Otherwise, access to the next page is denied.
-
-## Input Validation
-
-To ensure the security and integrity of user data, a utility function for input validation has been implemented. The function checks whether the entered email and password meet industry standards. Here's an example of the validation code:
-
-```javascript
-import { loginInfoType } from "../types/AuthType";
-
-export const validateInput = (
-  loginInfo: loginInfoType,
-  setValidationErrors: React.Dispatch<React.SetStateAction<loginInfoType>>
-) => {
-  const errors: loginInfoType = {
-    email: "",
-    password: "",
-  };
-
-  if (!loginInfo.email) {
-    errors.email = "Please enter an email address";
-  } else if (!/\S+@\S+\.\S+/.test(loginInfo.email)) {
-    errors.email = "Please enter a valid email address";
-  }
-
-  if (!loginInfo.password) {
-    errors.password = "Please enter a password";
-  } else if (loginInfo.password.length < 8) {
-    errors.password = "Password must be at least 8 characters long";
-  } else if (!/\d/.test(loginInfo.password)) {
-    errors.password = "Password must contain at least one number";
-  } else if (!/[a-z]/.test(loginInfo.password)) {
-    errors.password = "Password must contain at least one lowercase letter";
-  } else if (!/[A-Z]/.test(loginInfo.password)) {
-    errors.password = "Password must contain at least one uppercase letter";
-  } else if (!/\W/.test(loginInfo.password)) {
-    errors.password = "Password must contain at least one special character";
-  }
-
-  setValidationErrors(errors);
-
-  return Object.keys(errors).length === 0;
-};
-```
-
-The Todo page is now fully responsive, and I can add subtasks to the task. Additionally, I can delete and edit the subtask, and there is also a state to show and hide the subtask. Furthermore, to prevent injection attacks, I have written a utility function that doesn't allow any HTML injection.
-
-```javascript
-export const sanitizeInput = (input: string): string => {
-  // Remove special characters using regular expressions
-  const sanitizedText = input.replace(/[^\w\s]/gi, "");
-  // Escape HTML entities
-  const escapeHtml = (text: string): string => {
-    const map: { [key: string]: string } = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;",
-    };
-    return text.replace(/[&<>"']/g, (m) => map[m]);
-  };
-
-  return escapeHtml(sanitizedText);
-};
+- user password
+```bash
+   test@123
 ```

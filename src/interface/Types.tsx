@@ -26,6 +26,7 @@ export interface iTodoContextProps {
   deleteTodo: (todoId: number) => void;
   deleteSubtask: (todoId: number, subtaskId: number) => void;
   completeSubtask: (todoId: number, subtaskId: number) => void;
+  completeTodo: (todoId: number) => void;
   editTodo: (todoId: number, newText: string) => void;
   editSubtask: (todoId: number, subtaskId: number, newText: string) => void;
 }
@@ -41,4 +42,3 @@ export interface iUserContextProps {
   logoutHandler: () => void;
   setUser: (user: iUser | null) => void;
 }
-

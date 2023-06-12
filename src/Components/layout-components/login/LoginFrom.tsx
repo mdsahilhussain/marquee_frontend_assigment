@@ -42,15 +42,6 @@ const LoginFrom = ({ loginInfo }: IProps) => {
       const user = localStorage.getItem("user_info");
       const userInfo = user ? JSON.parse(user) : null;
 
-      if (userInfo?.email === values.email) {
-        alert("Error!\nEmail not match!");
-        return;
-      }
-      if (userInfo?.password === values.password) {
-        alert("Error!\nPassword not match!");
-        return;
-      }
-
       if (
         userInfo?.email === values.email &&
         userInfo?.password === values.password

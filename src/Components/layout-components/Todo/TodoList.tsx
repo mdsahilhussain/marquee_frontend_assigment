@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { useTodo } from "../../../Context/TodoContext";
 import { sanitizeInput } from "../../../utils/SanitizeChecker";
@@ -24,6 +24,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     deleteTodo,
     deleteSubtask,
     editSubtask,
+    completeTodo,
   } = useTodo();
   const [subtaskInput, setSubtaskInput] = useState<string>("");
   const [showAddSubtaskModal, setShowAddSubtaskModal] =
@@ -32,6 +33,18 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     useState<boolean>(false);
   const [selectedSubtask, setSelectedSubtask] = useState<Todo | null>(null);
   const [isSubtasksVisible, setIsSubtasksVisible] = useState<boolean>(false);
+  const [subtasksCompleted, setSubtasksCompleted] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (todo.subtasks.length === 0) {
+      setSubtasksCompleted(false);
+      return;
+    }
+    const allSubtasksCompleted = todo.subtasks.every(
+      (subtask) => subtask.isDone
+    );
+    setSubtasksCompleted(allSubtasksCompleted);
+  }, [todo.subtasks]);
 
   const handleAddSubtask = () => {
     setShowAddSubtaskModal(true);
@@ -39,6 +52,17 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
 
   const handleDeleteSubtask = (subtaskId: number) => {
     deleteSubtask(todo.id, subtaskId);
+  };
+
+  const onClickedTaskHandler = (todoId: number) => {
+    if (todo.subtasks.length > 0) {
+      subtasksCompleted
+        ? alert("Your all subtask completed\nthere is not pending subtask")
+        : alert("Complete your subtask\nyour subtask still pending");
+      return;
+    }
+    completeTodo(todoId);
+    setSubtasksCompleted(true);
   };
 
   const onCheckedHandler = (subtaskId: number) => {
@@ -88,9 +112,24 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   return (
     <div className=" px-4 pb-2 pt-4 mb-4 hover:rounded hover:border-gray-0 shadow">
       <div className="flex justify-between items-center mb-5">
-        <h3 className="text-lg font-semibold capitalize text-pink-500 ">
-          {todo.text}
-        </h3>
+        <div className="flex items-center ">
+          <input
+            checked={subtasksCompleted}
+            className="mr-2"
+            type="checkbox"
+            onChange={() => onClickedTaskHandler(todo.id)}
+          />
+          <h3
+            className="text-lg font-semibold capitalize text-pink-500 "
+            style={
+              subtasksCompleted
+                ? { textDecoration: "line-through", opacity: "60%" }
+                : undefined
+            }
+          >
+            {todo.text}
+          </h3>
+        </div>
         <div>
           <button
             onClick={() => handleDeleteTask(todo.id)}
@@ -106,12 +145,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
           </button>
         </div>
       </div>
-      {!isSubtasksVisible ||
-        (isSubtasksVisible && todo.subtasks.length <= 0 && (
-          <p style={{ fontSize: "0.7em", opacity: "60%" }}>
-            not any subtasks add
-          </p>
-        ))}
+      {todo.subtasks.length <= 0 && (
+        <p style={{ fontSize: "0.7em", opacity: "60%" }}>No subtasks yet.</p>
+      )}
 
       {isSubtasksVisible && todo.subtasks.length > 0 && (
         <React.Fragment>
@@ -144,7 +180,6 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
                 <MdEdit size={12} className="text-yellow-500 " />
               </button>
               <button
-                disabled={subtask.isDone}
                 onClick={() => handleDeleteSubtask(subtask.id)}
                 className="border border-red-500 rounded-full px-2 py-2 ml-2 "
               >
@@ -166,7 +201,8 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
             </span>
           ) : (
             <span style={{ fontSize: "0.7em" }} className="flex items-center">
-              <MdKeyboardArrowDown size={18} /> Show
+              <MdKeyboardArrowDown size={18} />
+              {`Show ${todo.subtasks.length} subtask`}
             </span>
           )}
         </button>

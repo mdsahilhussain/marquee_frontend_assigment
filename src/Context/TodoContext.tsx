@@ -12,6 +12,7 @@ const TodoContext = createContext<iTodoContextProps>({
   editTodo: () => {},
   editSubtask: () => {},
   completeSubtask: () => {},
+  completeTodo: () => {},
 });
 
 export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -34,8 +35,6 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
     setTodos((prevTodos) => [...prevTodos, todo]);
   };
 
-  console.log(todos, "-----todos");
-
   const addSubtask = (todoId: number, subtask: Todo) => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
@@ -51,6 +50,14 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const deleteTodo = (todoId: number) => {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== todoId));
+  };
+
+  const completeTodo = (todoId: number) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === todoId ? { ...todo, isDone: !todo.isDone } : todo
+      )
+    );
   };
 
   const completeSubtask = (todoId: number, subtaskId: number) => {
@@ -121,6 +128,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
         editTodo,
         editSubtask,
         completeSubtask,
+        completeTodo,
       }}
     >
       {children}

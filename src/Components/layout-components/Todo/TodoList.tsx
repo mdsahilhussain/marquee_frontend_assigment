@@ -20,10 +20,11 @@ interface TodoItemProps {
 const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   const {
     addSubtask,
-    completeSubtask,
     deleteTodo,
     deleteSubtask,
+    editTodo,
     editSubtask,
+    completeSubtask,
     completeTodo,
   } = useTodo();
   const [subtaskInput, setSubtaskInput] = useState<string>("");
@@ -62,7 +63,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
       return;
     }
     completeTodo(todoId);
-    setSubtasksCompleted(true);
+    setSubtasksCompleted((preValue) => !preValue);
   };
 
   const onCheckedHandler = (subtaskId: number) => {
@@ -71,6 +72,10 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
 
   const handleDeleteTask = (subtaskId: number) => {
     deleteTodo(subtaskId);
+  };
+
+  const handleEditTask = (taskId: number, taskText: string) => {
+    setShowEditSubtaskModal(true);
   };
 
   const handleEditSubtask = (subtaskId: number, subtaskText: string) => {
@@ -174,6 +179,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
               </p>
               <button
                 disabled={subtask.isDone}
+                style={subtask.isDone ? { cursor: "no-drop" } : undefined}
                 onClick={() => handleEditSubtask(subtask.id, subtask.text)}
                 className="border border-yellow-500 rounded-full px-2 py-2 ml-2  "
               >

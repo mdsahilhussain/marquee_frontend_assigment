@@ -12,7 +12,12 @@ const Dashboard: React.FC = () => {
         <div className="container mx-auto p-4">
           <h1 className="text-2xl font-bold mb-2">My Todo</h1>
           <Todo addTodo={addTodo} />
-          <TodoList />
+          <div
+            className=" scroll-m-0 overflow-y-scroll"
+            style={{ height: "68vh" }}
+          >
+            <TodoList />
+          </div>
         </div>
       </div>
     </React.Fragment>

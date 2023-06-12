@@ -52,6 +52,21 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== todoId));
   };
 
+  const deleteSubtask = (todoId: number, subtaskId: number) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === todoId
+          ? {
+              ...todo,
+              subtasks: todo.subtasks.filter(
+                (subtask) => subtask.id !== subtaskId
+              ),
+            }
+          : todo
+      )
+    );
+  };
+
   const completeTodo = (todoId: number) => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
@@ -70,21 +85,6 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
                 subtask.id === subtaskId
                   ? { ...subtask, isDone: !subtask.isDone }
                   : subtask
-              ),
-            }
-          : todo
-      )
-    );
-  };
-
-  const deleteSubtask = (todoId: number, subtaskId: number) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === todoId
-          ? {
-              ...todo,
-              subtasks: todo.subtasks.filter(
-                (subtask) => subtask.id !== subtaskId
               ),
             }
           : todo
